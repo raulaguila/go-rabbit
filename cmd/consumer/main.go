@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/joho/godotenv"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -44,6 +45,7 @@ func consume(number int) {
 func main() {
 	for i := 1; i < 5; i++ {
 		go consume(i)
+		time.Sleep(time.Second)
 	}
 
 	consume(5)

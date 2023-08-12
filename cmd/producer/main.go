@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
@@ -46,6 +47,7 @@ func publish(number int) {
 func main() {
 	for i := 1; i < 5; i++ {
 		go publish(i)
+		time.Sleep(time.Second)
 	}
 
 	publish(5)
