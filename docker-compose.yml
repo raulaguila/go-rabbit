@@ -1,0 +1,38 @@
+version: '3.1'
+
+name: go-rabbit
+
+volumes:
+  rabbitmqdata:
+    name: rabbitmqdata
+
+networks:
+
+  rabbit_network:
+    name: rabbit_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 55.23.1.0/24
+          gateway: 55.23.1.1
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: rabbitmq
+    hostname: rabbitmq
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 15672:15672
+      - ${RABBIT_EXT_PORT}:${RABBIT_INT_PORT}
+    volumes:
+        - rabbitmqdata:/var/lib/rabbitmq/mnesia
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBIT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBIT_PASS}
+    networks:
+      rabbit_network:
+        ipv4_address: ${RABBIT_INT_HOST}
