@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/raulaguila/go-rabbit/internal/tag/entity"
 	"github.com/raulaguila/go-rabbit/pkg/rabbitmq"
 )
+
+const workers int = 2
 
 func init() {
 	if err := godotenv.Load(); err != nil {
@@ -45,10 +46,9 @@ func publish(number int) {
 }
 
 func main() {
-	for i := 1; i < 5; i++ {
+	for i := 1; i < workers; i++ {
 		go publish(i)
-		time.Sleep(time.Second)
 	}
 
-	publish(5)
+	publish(workers)
 }

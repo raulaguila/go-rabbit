@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/joho/godotenv"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/raulaguila/go-rabbit/internal/tag/entity"
 	"github.com/raulaguila/go-rabbit/pkg/rabbitmq"
 )
+
+const workers int = 2
 
 func init() {
 	if err := godotenv.Load(); err != nil {
@@ -43,10 +44,9 @@ func consume(number int) {
 }
 
 func main() {
-	for i := 1; i < 5; i++ {
+	for i := 1; i < workers; i++ {
 		go consume(i)
-		time.Sleep(time.Second)
 	}
 
-	consume(5)
+	consume(workers)
 }
