@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 
@@ -40,7 +39,7 @@ func publish(number int) {
 
 	for {
 		tag := GenerateTag()
-		fmt.Printf("Producer number %v: %v\n", number, tag)
+		// fmt.Printf("Producer number %v: %v\n", number, tag)
 		panicErr(rabbitmq.Publish(ch, tag))
 	}
 }

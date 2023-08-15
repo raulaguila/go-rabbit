@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -39,7 +38,7 @@ func consume(number int) {
 		err := json.Unmarshal(msg.Body, &tag)
 		panicErr(err)
 
-		fmt.Printf("Consumer number %v: %v\n", number, tag)
+		// fmt.Printf("Consumer number %v: %v\n", number, tag)
 	}
 }
 

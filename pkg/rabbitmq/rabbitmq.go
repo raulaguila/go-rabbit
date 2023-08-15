@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/raulaguila/go-rabbit/internal/tag/entity"
@@ -50,13 +51,13 @@ func Publish(ch *amqp.Channel, tag entity.Tag) error {
 		return err
 	}
 
-	err = ch.PublishWithContext(context.TODO(), "amq.direct", "", false, false, amqp.Publishing{
-		ContentType: "application/json",
-		Body:        body,
-	})
-	if err != nil {
-		return err
-	}
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
 
-	return nil
+	return ch.PublishWithContext(ctx, "amq.direct", "", false, false, amqp.Publishing{
+		ContentType:     "application/json",
+		ContentEncoding: "utf-8",
+		Timestamp:       time.Now(),
+		Body:            body,
+	})
 }
