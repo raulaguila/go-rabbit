@@ -19,7 +19,7 @@ networks:
 services:
 
   rabbitmq:
-    image: rabbitmq:3.12-management-alpine
+    build: .
     container_name: rabbitmq
     hostname: rabbitmq
     restart: always
@@ -27,9 +27,11 @@ services:
       - .env
     ports:
       - 15672:15672
+      - 1883:1883
       - ${RABBIT_EXT_PORT}:${RABBIT_INT_PORT}
     volumes:
         - rabbitmqdata:/var/lib/rabbitmq/mnesia
+        - ./config/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBIT_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBIT_PASS}
