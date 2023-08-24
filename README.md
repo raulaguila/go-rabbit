@@ -2,7 +2,7 @@
     Go Rabbit
 </h1>
 
-<p align="center">Service simulating RFID reader posting tags readed on a rabbitmq queue by MQTT topic, with the "backend" receiving, processing and publishing on other MQTT topic.</p>
+<p align="center">Service simulating RFID reader posting tags readed on a rabbitmq queue by MQTT topic, with the "backend" receiving, processing and publishing on another MQTT topic.</p>
 
 <ul>
     <li>Generate the ".env" file running "env.sh" script</li>
