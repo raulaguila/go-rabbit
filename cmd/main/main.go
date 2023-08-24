@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bufio"
 	crand "crypto/rand"
 	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
 	"strings"
 	"time"
 
@@ -47,7 +49,7 @@ func consumerQueueTags(rabbit *rabbitmq.Rabbitmq) {
 }
 
 func checkSliceTags(rabbit *rabbitmq.Rabbitmq) {
-	for {
+	for rabbit.IsConnected() {
 		if len(tags) == 0 {
 			time.Sleep(100 * time.Millisecond)
 			continue
@@ -87,7 +89,7 @@ func readerSimulator(rabbit *rabbitmq.Rabbitmq, sleep time.Duration) {
 		return fmt.Sprintf("%02X:%02X:%02X:%02X:%02X:%02X", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5])
 	}
 
-	for {
+	for rabbit.IsConnected() {
 		tag := domain.TagReaded{
 			Mac:     randMac(),
 			Tag:     randString(16),
@@ -102,11 +104,14 @@ func readerSimulator(rabbit *rabbitmq.Rabbitmq, sleep time.Duration) {
 
 func main() {
 	rabbit := &rabbitmq.Rabbitmq{}
-
 	alert.Error(rabbit.OpenChannel())
-	defer rabbit.CloseChannel()
 
 	go consumerQueueTags(rabbit)
 	go readerSimulator(rabbit, 200*time.Millisecond)
-	checkSliceTags(rabbit)
+	go checkSliceTags(rabbit)
+
+	log.Println("Press <ENTER> to exit")
+	bufio.NewScanner(os.Stdin).Scan()
+	alert.Error(rabbit.CloseChannel())
+	time.Sleep(1 * time.Second)
 }

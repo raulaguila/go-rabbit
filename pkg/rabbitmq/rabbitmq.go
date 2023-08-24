@@ -10,7 +10,8 @@ import (
 )
 
 type Rabbitmq struct {
-	ch *amqp.Channel
+	ch        *amqp.Channel
+	connected bool
 }
 
 func (r *Rabbitmq) getUri() string {
@@ -20,7 +21,13 @@ func (r *Rabbitmq) getUri() string {
 	return fmt.Sprintf("amqp://%v:%v@%v:%v", os.Getenv("RABBIT_USER"), os.Getenv("RABBIT_PASS"), os.Getenv("RABBIT_EXT_HOST"), os.Getenv("RABBIT_EXT_PORT"))
 }
 
+func (r *Rabbitmq) IsConnected() bool {
+	return r.connected
+}
+
 func (r *Rabbitmq) CloseChannel() error {
+	r.connected = false
+	time.Sleep(200 * time.Millisecond)
 	return r.ch.Close()
 }
 
@@ -35,6 +42,7 @@ func (r *Rabbitmq) OpenChannel() error {
 		return err
 	}
 
+	r.connected = true
 	return nil
 }
 
