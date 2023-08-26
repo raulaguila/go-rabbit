@@ -4,6 +4,10 @@
 
 <p align="center">Service simulating RFID reader posting tags readed on a rabbitmq queue by MQTT topic, with the "backend" receiving, processing and publishing on another MQTT topic.</p>
 
+&nbsp;
+
+#### Run
+
 * Generate the `.env` file running `env.sh` script
 * Start docker-compose
 * Access rabbitmq management [on this address](http://127.0.0.1:15672) with user `admin` and password `admin`
