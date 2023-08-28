@@ -19,5 +19,5 @@
 go run cmd/main/main.go
 ```
 
-* Watch the topic `/tags/detected` with an mqtt client using mqtt version 3.1 when connecting
+* Watch the topic `/tags/detected` with a mqtt client using mqtt version 3.1 to connecting
 * Suggested mqtt client: [MQTTX](https://mqttx.app/downloads)
